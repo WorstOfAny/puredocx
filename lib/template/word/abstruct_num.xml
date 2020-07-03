@@ -1,0 +1,18 @@
+<w:abstractNum w:abstractNumId="{NUM_ID}">
+	<w:nsid w:val="099A081C"/>
+	<w:multiLevelType w:val="hybridMultilevel"/>
+	<w:lvl w:ilvl="{LVL}">
+		<w:start w:val="1"/>
+		<w:numFmt w:val="{LIST_FORMAT}"/>
+		<w:lvlText w:val="{LVL_TEXT}"/>
+		<w:lvlJc w:val="start"/>
+		<w:rPr>
+			<w:b w:val="{LIST_BOLD_ENABLE}"/>
+			<w:sz w:val="{LIST_SIZE}"/>
+		</w:rPr>
+	</w:lvl>
+</w:abstractNum>
+
+<w:num w:numId="{TYPE_ID}">
+	<w:abstractNumId w:val="{NUM_ID}"/>
+</w:num>

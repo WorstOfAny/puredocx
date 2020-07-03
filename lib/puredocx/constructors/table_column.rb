@@ -1,7 +1,10 @@
 module PureDocx
   module Constructors
     class TableColumn
-      MAX_TABLE_WIDTH = 9_355
+      TABLE_WIDTH = {
+				value: 9_355,
+				type: 'dxa'
+			}.freeze
 
       attr_reader :client_columns_width, :columns_count
 
@@ -20,7 +23,7 @@ module PureDocx
       end
 
       def table_width
-        @client_table_width || MAX_TABLE_WIDTH
+        @client_table_width || TABLE_WIDTH
       end
 
       def total_params_width
@@ -28,9 +31,9 @@ module PureDocx
       end
 
       def calculate_default_width
-        return (table_width / columns_count)          if client_columns_width.nil?
-        return (table_width - total_params_width / 1) if client_columns_width.none?(&:nil?)
-        ((table_width - total_params_width) / client_columns_width.select(&:nil?).size)
+        return (table_width[:value] / columns_count)          if client_columns_width.nil?
+        return (table_width[:value] - total_params_width / 1) if client_columns_width.none?(&:nil?)
+        ((table_width[:value] - total_params_width) / client_columns_width.select(&:nil?).size)
       end
 
       private

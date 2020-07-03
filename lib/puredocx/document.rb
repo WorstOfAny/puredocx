@@ -1,20 +1,26 @@
 module PureDocx
   class Document
     attr_accessor :body_content, :header_content
-    attr_reader   :file_path, :file_name, :brake, :new_page, :rels_constructor, :pagination_position
+    attr_reader   :file_path, :file_name, :brake, :new_page, :rels_constructor, :pagination_position, :margins
 
     def initialize(file_path, arguments = {})
       @file_path = file_path
       ensure_file!
       @file_name           = File.basename(file_path)
       @pagination_position = arguments[:pagination_position]
+      @margins             = {
+        margin_top: 1134,
+        margin_right: 850,
+        margin_bottom: 1134,
+        margin_left: 1701
+      }.merge arguments.fetch(:margins, {})
       @rels_constructor    = PureDocx::Constructors::Rels.new
       @brake               = File.read(DocArchive.template_path('brake.xml'))
       @new_page            = File.read(DocArchive.template_path('new_page.xml'))
       @header_content      = ''
       @body_content        = ''
       (class << self; self; end).class_eval do
-        %i[text table image].each do |method_name|
+        %i[text table image list].each do |method_name|
           define_method method_name do |content, options = {}|
             Object.const_get(
               "PureDocx::XmlGenerators::#{method_name.to_s.capitalize}"
@@ -42,8 +48,13 @@ module PureDocx
       DocArchive.open(file_path, rels_constructor.rels) do |file|
         file.add('[Content_Types].xml', DocArchive.template_path('[Content_Types].xml'))
         file.save_rels
-        file.save_document_content(body_content, header_content, pagination_position)
+        file.save_document_content(body_content, header_content, pagination_position, margins)
       end
+		ensure
+			content = File.read(DocArchive.template_path('word/numbering_default.xml'))
+			File.open(DocArchive.template_path('word/numbering.xml'), 'w') do |f|
+				f.write(content)
+			end
     end
   end
 end

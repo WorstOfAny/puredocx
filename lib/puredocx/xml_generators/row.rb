@@ -20,7 +20,7 @@ module PureDocx
 
       def cells
         content.each_with_index.map do |cell_content, index|
-          PureDocx::XmlGenerators::Cell.new(cell_content, nil, width: cells_width[index]).xml
+          PureDocx::XmlGenerators::Cell.new(cell_content, nil).xml
         end.join
       end
     end

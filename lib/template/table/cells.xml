@@ -1,1 +1,1 @@
-<w:tc><w:tcPr><w:tcW w:w="{WIDTH}" w:type="dxa"/><w:shd w:fill="auto" w:val="clear"/></w:tcPr>{CONTENT}</w:tc>
+<w:tc><w:tcPr><w:tcW w:w="{WIDTH_VALUE}" w:type="{WIDTH_TYPE}"/><w:shd w:fill="{COLOR}" w:val="clear"/><w:vAlign w:val="{ALIGN}"/></w:tcPr>{CONTENT}</w:tc>

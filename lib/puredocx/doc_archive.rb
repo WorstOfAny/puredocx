@@ -4,9 +4,9 @@ module PureDocx
     FOOTER_TEMPLATE_PATH   = 'word/footer1.xml'.freeze
     DOCUMENT_TEMPLATE_PATH = 'word/document.xml'.freeze
 
-    attr_reader :io, :basic_rels, :word_rels, :header_rels
+    attr_reader :io, :basic_rels, :word_rels, :header_rels, :options
 
-    def initialize(io, rels)
+    def initialize(io, rels, options = {})
       @io = io
       @basic_rels  = rels[:basic_rels]
       @word_rels   = rels[:word_rels]
@@ -24,12 +24,12 @@ module PureDocx
       io.add(file, path)
     end
 
-    def save_document_content(content, header, pagination_position)
+    def save_document_content(content, header, pagination_position, margins = {})
       document_colontitle!(header,              HEADER_TEMPLATE_PATH)
       document_colontitle!(pagination_position, FOOTER_TEMPLATE_PATH)
 
       io.get_output_stream(DOCUMENT_TEMPLATE_PATH) do |os|
-        os.write document_content(content, header, pagination_position)
+        os.write document_content(content, header, pagination_position, margins)
       end
     end
 
@@ -64,15 +64,18 @@ module PureDocx
       end
     end
 
-    def document_content(content, header, pagination_position)
+    def document_content(content, header, pagination_position, margins = {})
       header_reference = colontitle_reference_xml('headerReference', 'header1.xml') unless header.empty?
       footer_reference = colontitle_reference_xml('footerReference', 'footer1.xml') if pagination_position
 
-      File.read(self.class.template_path(DOCUMENT_TEMPLATE_PATH)).tap do |document_content|
+      p(File.read(self.class.template_path(DOCUMENT_TEMPLATE_PATH)).tap do |document_content|
         document_content.gsub!('{HEADER}',  header_reference || '')
         document_content.gsub!('{CONTENT}', content)
         document_content.gsub!('{FOOTER}',  footer_reference || '')
-      end
+        margins.each do |margin, value|
+          document_content.gsub!("{#{margin}}".upcase, value.to_s)
+        end
+      end)
     end
 
     def document_colontitle!(content, content_path)
