@@ -13,11 +13,11 @@ module PureDocx
         'header1.xml'       => "#{DOCUMENT_RELATIONSHIPS}header",
         'footer1.xml'       => "#{DOCUMENT_RELATIONSHIPS}footer",
         'styles.xml'        => "#{DOCUMENT_RELATIONSHIPS}styles",
-        'numbering.xml'     => "#{DOCUMENT_RELATIONSHIPS}numbering",
         'settings.xml'      => "#{DOCUMENT_RELATIONSHIPS}settings",
         'webSettings.xml'   => "#{DOCUMENT_RELATIONSHIPS}webSettings",
         'fontTable.xml'     => "#{DOCUMENT_RELATIONSHIPS}fontTable",
-        'theme/theme1.xml'  => "#{DOCUMENT_RELATIONSHIPS}theme"
+        'theme/theme1.xml'  => "#{DOCUMENT_RELATIONSHIPS}theme",
+        'numbering.xml'     => "#{DOCUMENT_RELATIONSHIPS}numbering"
       }.freeze
 
       attr_accessor :basic_rels, :word_rels, :header_rels

@@ -68,14 +68,14 @@ module PureDocx
       header_reference = colontitle_reference_xml('headerReference', 'header1.xml') unless header.empty?
       footer_reference = colontitle_reference_xml('footerReference', 'footer1.xml') if pagination_position
 
-      p(File.read(self.class.template_path(DOCUMENT_TEMPLATE_PATH)).tap do |document_content|
+      File.read(self.class.template_path(DOCUMENT_TEMPLATE_PATH)).tap do |document_content|
         document_content.gsub!('{HEADER}',  header_reference || '')
         document_content.gsub!('{CONTENT}', content)
         document_content.gsub!('{FOOTER}',  footer_reference || '')
         margins.each do |margin, value|
           document_content.gsub!("{#{margin}}".upcase, value.to_s)
         end
-      end)
+      end
     end
 
     def document_colontitle!(content, content_path)

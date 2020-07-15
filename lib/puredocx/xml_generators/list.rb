@@ -36,13 +36,18 @@ module PureDocx
 				File.read(DocArchive.template_path('word/abstruct_num.xml'))
 			end
 
+			def list_num_template
+				File.read(DocArchive.template_path('word/num.xml'))
+			end
+
 			def xml
 				if list_params[:new]
-					content =
+					cont =
 						File
 							.read(DocArchive.template_path('word/numbering.xml'))
-							.gsub(/(?=\<\/w:numbering)/, params.each_with_object(list_abstruct_template.clone) { |(param, value), memo| memo.gsub!(param, value.to_s) })
-					File.open(DocArchive.template_path('word/numbering.xml'), 'w') {|f|  f.write(content) }
+							.sub(/((?<=\>)(?=\<\/w:numbering\>)|(?<=\<\/w:abstractNum\>)\n(?=\<w:num))/, params.each_with_object(list_abstruct_template.clone) { |(param, value), memo| memo.gsub!(param, value.to_s) })
+							.sub(/(?=\<\/w:numbering)/, params.each_with_object(list_num_template.clone) { |(param, value), memo| memo.gsub!(param, value.to_s) })
+					File.open(DocArchive.template_path('word/numbering.xml'), 'w') {|f|  f.write(cont) }
 				end
 				XmlGenerators::Text
 					.new(self.content, rels_constructor, **arguments, list_property: super)
@@ -51,21 +56,3 @@ module PureDocx
     end
   end
 end
-
-#
-# <w:abstractNum w:abstractNumId="1">
-# 	<w:nsid w:val="099A081C"/>
-# 	<w:multiLevelType w:val="singleLevel"/>
-# 	<w:lvl w:ilvl="0">
-# 		<w:start w:val="1"/>
-# 		<w:numFmt w:val="decimal"/>
-# 		<w:lvlText w:val="1.%1"/>
-# 		<w:lvlRestart w:val="1"/>
-# 		<w:lvlPicBulletId w:val="0"/>
-# 		<w:lvlJc w:val="start"/>
-# 	</w:lvl>
-# </w:abstractNum>
-#
-# <w:num w:numId="2">
-# 	<w:abstractNumId w:val="1"/>
-# </w:num>

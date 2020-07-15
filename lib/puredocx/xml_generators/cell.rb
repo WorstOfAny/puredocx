@@ -1,18 +1,13 @@
 module PureDocx
   module XmlGenerators
     class Cell < Base
-			DEFAULT_WIDTH = {
-				type: 'dxa',
-				value: '1000'
-			}
-
-      attr_reader :width, :align, :color
+      attr_reader :width, :v_align
 
       def initialize(content, rels_constructor, arguments = {})
         super(content, rels_constructor)
-        @width = content.fetch(:width, DEFAULT_WIDTH)
-        @align = content[:align]
-        @color = content.fetch(:color, 'ffffff')
+        @width = arguments[:width]
+        @v_align = content[:v_align] || arguments[:v_align] || 'top'
+        @cell_merge = content[:cell_merge]
       end
 
       def template
@@ -22,12 +17,17 @@ module PureDocx
       def params
         {
           '{CONTENT}'      => content[:column].map(&:chomp).join,
-          '{WIDTH_TYPE}'   => width[:type],
-          '{WIDTH_VALUE}'  => width[:value],
-          '{ALIGN}'        => align,
-          '{COLOR}'        => color
+          '{WIDTH}'        => width,
+          '{V_ALIGN}'      => v_align,
+          '{CELL_MERGE}'   => cell_merge
         }
       end
+
+      private
+
+      def cell_merge
+				@cell_merge ? %{<w:vMerge w:val="#{@cell_merge}"/>} : ''
+			end
     end
   end
 end

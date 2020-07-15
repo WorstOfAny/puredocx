@@ -51,9 +51,9 @@ module PureDocx
         file.save_document_content(body_content, header_content, pagination_position, margins)
       end
 		ensure
-			content = File.read(DocArchive.template_path('word/numbering_default.xml'))
+			cont = File.read(DocArchive.template_path('word/numbering_default.xml'))
 			File.open(DocArchive.template_path('word/numbering.xml'), 'w') do |f|
-				f.write(content)
+				f.write(cont)
 			end
     end
   end

@@ -1,4 +1,1 @@
-<w:numPr>
-	<w:ilvl w:val="{LIST_LVL}"/>
-	<w:numId w:val="{LIST_TYPE}"/>
-</w:numPr>
+<w:numPr><w:ilvl w:val="{LIST_LVL}"/><w:numId w:val="{LIST_TYPE}"/></w:numPr>
